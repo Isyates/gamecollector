@@ -1,5 +1,6 @@
 from django.db import models
 from django.urls import reverse
+from django.contrib.auth.models import User
 
 PLATFORM = (
   ('PC', 'PC'),
@@ -20,6 +21,7 @@ class Game(models.Model):  # Note that parens are optional if not inheriting fro
     description = models.CharField(max_length=250)
     ryear = models.IntegerField()
     achievements = models.ManyToManyField(Achievement)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def __str__(self):
       return self.title
@@ -38,4 +40,10 @@ class History(models.Model):
   def __str__(self):
     return f'game last played on {self.get_play_history_display()} on {self.date}'
 
+class Photo(models.Model):
+  url = models.CharField(max_length=200)
+  game = models.ForeignKey(Game, on_delete= models.CASCADE)
+
+  def __str__(self):
+    return f"photo for game_id:{self.game_id} @{self.url}"
 
